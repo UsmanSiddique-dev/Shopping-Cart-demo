@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "homepage": "https://github.com/UsmanSiddique-dev/Shopping-Cart-demo",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist -b gh-pages --force"
+    "deploy": "gh-pages -d dist "
   },
   "dependencies": {
     "react": "^19.2.0",
