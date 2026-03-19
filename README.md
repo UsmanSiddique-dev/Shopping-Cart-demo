@@ -1,10 +1,10 @@
-# Prime Co Shopping Cart Lab
+﻿# Prime Co Shopping Cart Lab
 
-> Modern retail preview built with React 19, TypeScript 5.9, and Vite 8 � a single-page dashboard that walks users through product discovery, cart management, and a mock checkout in under 30 seconds.
+> Modern retail preview built with React 19, TypeScript 5.9, and Vite 8 - a single-page dashboard that walks users through product discovery, cart management, and a mock checkout in under 30 seconds.
 
 **Why it matters**
-- Real-time totals + reducer-backed cart state keep pricing accurate as visitors toggle between products and the cart view.
-- Self-contained stack (static JSON catalog + client-side logic) is ideal for prototyping checkout concepts before wiring in a backend.
+- Real-time totals plus reducer-backed cart state keep pricing accurate as visitors toggle between products and the cart view.
+- Self-contained stack (static JSON catalog plus client-side logic) is ideal for prototyping checkout concepts before wiring in a backend.
 
 ## Getting Started
 | Section | Anchor |
@@ -17,57 +17,61 @@
 | Notes | [#notes](#notes) |
 | Contributing | [#contributing](#contributing) |
 
-## Overview {#overview}
-- **Goals:** Showcase a lightweight consumer-facing cart where users can flip between browsing and reviewing their order, adjust quantities, and submit a mock purchase.
-- **Stack:** React 19 + Vite 8 (beta) + TypeScript 5.9, powered by the `@vitejs/plugin-react` compiler configuration (with `babel-plugin-react-compiler`), plus ESLint 9.x for consistency.
-- **Architecture:** `App` hosts a `Header`, `ProductList`, and `Cart`. `ProductProvider` injects the catalog (seeded from `data/products.json`), while `CartProvider` exposes reducer-driven actions (`ADD`, `REMOVE`, `QUANTITY`, `SUBMIT`). Memoized `Product` and `CartLineItem` components reduce re-renders, and the `Nav` component flips the `viewCart` toggle stored in `App`.
+<a id="overview"></a>
+## Overview
+- **Goals:** Provide a lightweight shopping experience where visitors can switch between the product catalog and their cart, adjust quantities, and submit a mock purchase with immediate feedback.
+- **Stack:** React 19 + Vite 8 (beta) + TypeScript 5.9 with `@vitejs/plugin-react` (plus `babel-plugin-react-compiler`) and ESLint 9.x.
+- **Architecture:** `App` orchestrates `Header`, `ProductList`, and `Cart`. `ProductProvider` seeds data from `data/products.json`, and `CartProvider` exposes reducer actions (`ADD`, `REMOVE`, `QUANTITY`, `SUBMIT`). `Product` and `CartLineItem` are memoized to prevent needless re-renders, while `Nav` flips the `viewCart` toggle held by `App`.
 
-> **Tip:** The cart context memoizes the reducer action map so child components receive stable action constants, keeping the memo comparisons effective.
+> **Tip:** The cart context memoizes the action map so consumers can rely on stable identity when invoking dispatch.
 
-## Setup {#setup}
+<a id="setup"></a>
+## Setup
 ### Prerequisites
-- ![Node.js 20+](https://img.shields.io/badge/Node.js-20%2B-brightgreen) Node.js LTS (Windows/macOS/Linux friendly)
-- ![npm bundled](https://img.shields.io/badge/npm-bundled-blue) npm 10+ (delivered with Node.js)
+- ![Node.js 20+](https://img.shields.io/badge/Node.js-20%2B-brightgreen) Node.js LTS (Windows/macOS/Linux compatible)
+- ![npm bundled](https://img.shields.io/badge/npm-bundled-blue) npm 10+ (bundled with Node.js)
 
 ### Install & bootstrap
 ```bash
 npm install
 ```
-> The `node_modules` folder is already present for reference, but reinstalling keeps local tooling aligned when dependencies change.
+> The checked-in `node_modules` folder is for reference. Run `npm install` any time dependencies change.
 
 ### Configuration
-- **Environment variables:** none required. The product catalog is read from `data/products.json`, and image assets live under `src/images/{id}.jpg`.
-- **Secrets:** there are no secrets; this is a pure front-end prototype.
+- **Environment variables:** none required. The catalog is pulled from `data/products.json`, and images live under `src/images/{id}.jpg`.
+- **Secrets:** there are no secrets; this is a purely front-end prototype.
 
 ### Build & tooling commands
 ```bash
 npm run dev       # start Vite dev server (default http://localhost:5173)
-npm run build     # produce production bundle (runs TypeScript project build + Vite)
-npm run lint      # run ESLint over the entire src tree
-npm run preview   # test the production bundle locally
+npm run build     # build TypeScript project and bundle assets
+npm run lint      # run ESLint over the repository
+npm run preview   # serve the production bundle locally
 ```
 
-## Usage {#usage}
-1. Run `npm run dev` and visit `http://localhost:5173` in your browser.
-2. Browse products in the default view. Each `Product` renders a hero image (from `src/images/`) and an �Add to Cart� button plus price formatting via `Intl.NumberFormat`.
-3. Click **View Cart** in the navigation to inspect line items.
-   - Adjust quantities using the `<select>` dropdown (up to 20 or the current quantity, whichever is higher).
+<a id="usage"></a>
+## Usage
+1. Run `npm run dev` and open http://localhost:5173 in your browser.
+2. Browse the product list. Each `Product` card renders a hero image (from `src/images/`), price formatting via `Intl.NumberFormat`, and an "Add to Cart" button.
+3. Click **View Cart** to inspect line items.
+   - Adjust quantities in the `<select>` dropdown (up to 20 or the current quantity, whichever is higher).
    - Remove items with the **delete** button.
-   - Totals (`totalItems`, `Totalprice`) update via `useCart`�s reducer state.
-4. Press **Place Order** to dispatch the `SUBMIT` action, which clears the cart and surfaces a thank-you confirmation.
+   - Totals (`totalItems`, `Totalprice`) update via the `useCart` reducer state.
+4. Click **Place Order** to dispatch `SUBMIT`, which clears the cart and surfaces a thank-you confirmation.
 
 ### Sample commands + expectations
-- `npm run dev` ? dev server logs `Local: http://localhost:5173`; verifying the page loads with product tiles.
-- `npm run build` ? emits `dist/` bundle; success message indicates assets compiled.
-- `npm run lint` ? ESLint reports zero warnings (or highlights files needing formatting).
+- `npm run dev` -> Dev server logs `Local: http://localhost:5173` and the product tiles render.
+- `npm run build` -> Emits the `dist/` folder and reports a successful bundle.
+- `npm run lint` -> ESLint exits cleanly or reports files needing fixes.
 
 ### Health checks & verification
-- The app is effectively a client-only SPA; verifying `npm run build` and `npm run preview` ensures bundling succeeds.
-- Unit tests are not present, so run the lint/build commands before deployment to confirm no type issues.
+- Run `npm run build` and `npm run preview` to confirm the production bundle renders without TypeScript errors.
+- There are no automated tests yet, so lint/build are the primary checks before shipping.
 
-## Visuals {#visuals}
+<a id="visuals"></a>
+## Visuals
 ![Product showcase](src/images/1.jpg)
-*Caption: Static hero image used by each `Product` card to simulate product photography (IDs 1�3). Replace these JPGs when real assets arrive.*
+*Caption: Placeholder hero image used by each product card (IDs 1-3). Update these JPGs when brand assets are available.*
 
 ```mermaid
 graph TD
@@ -80,27 +84,37 @@ graph TD
   Cart --> CartLineItem
   ProductProvider --> ProductList
 ```
-*Caption: Component/context topology. `ProductProvider` seeds the catalog, while `CartProvider` exposes the reducer actions that both `Product` and `CartLineItem` dispatch.*
+*Caption: Component/context topology. `ProductProvider` seeds the catalog, while `CartProvider` exposes reducer actions consumed by `Product` and `CartLineItem`.*
 
-## FAQ {#faq}
+<a id="faq"></a>
+## FAQ
 #### How do I deploy this bundle?
-Run `npm run build` to produce the `dist/` folder, then serve it via any static host (Vercel, Netlify, GitHub Pages). Use `npm run preview` locally to confirm the minified output renders before deploying.
+Run `npm run build` to produce the `dist/` folder and deploy it to any static host (Vercel, Netlify, GitHub Pages). Use `npm run preview` to verify the minified output before publishing.
 
-#### Why do totals reset when I click �Place Order�?
-The `SUBMIT` action in `CartProvider` returns an empty cart array. It�s a placeholder for where you�d normally call a checkout API; you can extend it to clear the cart only after a successful network response.
+#### Why do totals reset when I click Place Order?
+The `SUBMIT` reducer action clears the cart array. It stands in for a real checkout API response. Extend the action to call a backend before emptying the cart if needed.
 
 #### What if I need a real products API?
-Swap the `initState` in `ProductsProvider` for a `fetch` call (commented out in the file). Add `.env` variables such as `VITE_PRODUCTS_URL` and guard the fetch with a try/catch so the UI can fall back to the bundled JSON catalog.
+Replace the hard-coded `initState` in `ProductsProvider.tsx` with a fetch guarded by `VITE_PRODUCTS_URL` (the fetch block is already commented out). Add the env variable and error handling so the UI can fall back to `data/products.json` when the request fails.
 
-## Contributing {#contributing}
-- **Code style:** TypeScript + React 19 with ESLint 9.x; follow the existing reducer/action patterns and keep components memoized when they receive derived props.
-- **Testing:** There are no automated tests yet�run `npm run lint` and `npm run build` locally before opening a PR.
+<a id="contributing"></a>
+## Contributing
+- **Code style:** Follow the TypeScript + React 19 conventions. Keep reducers pure, and memoize components when derived props are passed in.
+- **Testing:** There are no automated tests yet. Run `npm run lint` and `npm run build` locally before opening a PR.
 - **Workflow:**
   1. Fork/clone the repo and run `npm install`.
-  2. Make changes in a feature branch (`codex/branch-name`).
-  3. Run `npm run lint` and `npm run build`.
-  4. Open a PR describing the goal, testing commands executed, and any visual regressions.
-  5. Add screenshots or recorded GIFs under `public/` if the UI changes.
+  2. Work in a feature branch named `codex/<feature>`.
+  3. Run lint/build before committing.
+  4. Open a PR describing the goal, the commands you ran, and any visual changes.
+  5. Add screenshots or recordings under `public/` if the UI changed.
 
+<a id="notes"></a>
+## Notes
+- **Assumption:** The static `data/products.json` dataset is currently authoritative; no remote catalog exists yet, so the app ships with three demo products and matching JPG placeholders (`src/images/1.jpg`, `2.jpg`, `3.jpg`).
+- **TODO:** State is not persisted; the cart resets on refresh because everything lives in React context only.
+- **TODO:** Add automated tests (unit for reducers and E2E for the cart flow) to harden the experience before wider release.
 
-
+## Next Steps
+1. Replace the static catalog with a fetch to `VITE_PRODUCTS_URL` while falling back to the bundled JSON when the network call fails.
+2. Persist cart state (LocalStorage, session storage, or backend) so visitors can reload without losing their order.
+3. Add automated tests and expose `npm run test` once the suites are in place.
